@@ -5,11 +5,13 @@ export class Shark extends PIXI.Sprite {
 
   constructor(texture: PIXI.Texture) {
     super(texture);
-    this.speed = Math.random() * 5;
+    this.speed = 2;
     this.x = Math.random() * window.innerWidth + 100;
     this.y = Math.random() * window.innerHeight;
-    this.anchor.set(0.5);
-    this.scale.set( 0.6);
+    // this.x = 1000;
+    // this.y = 100;
+    this.anchor.set(-5);
+    this.scale.set( 0.5);
 
     const filter = new PIXI.filters.ColorMatrixFilter();
     filter.hue(Math.random() * 360, false);
@@ -22,6 +24,7 @@ export class Shark extends PIXI.Sprite {
 
   public swim() {
     this.x -= this.speed;
+    this.y = 1.1;
     this.y += Math.cos(this.x * 0.03) * 1.1;
     if (this.x < -100) {
       this.x = window.innerWidth + 100;
@@ -30,6 +33,6 @@ export class Shark extends PIXI.Sprite {
   }
 
   public hitShark() {
-    console.log("hit shark");
+    console.log("hit spider");
   }
 }

@@ -11,6 +11,7 @@ import { Groundnightscene } from "./groundnightscene"
 
 //import images
 import didiImage from "./images/didi.1.png"
+import restartImage from "./images/restart.png"
 import sharkImage from "./images/spiderwalk.png"
 import skynightsceneImage from "./images/skynightscene.png"
 import bubbleImage from "./images/bubble.png"
@@ -22,12 +23,13 @@ import bgMusic from "url:./images/theme.mp3"
 
 
 export class Game {
+
     public pixi: PIXI.Application;
     private loader: PIXI.Loader;
     private sharks: Shark[] = [];
     private gameOverButton: PIXI.Sprite
     private bubbles: Bubble[] = [];
-    private groundnightscene: Groundnightscene;
+    private nightscenefloor: Groundnightscene;
     private didi: Didi;
 
     public engine: Matter.Engine;
@@ -46,6 +48,7 @@ export class Game {
         this.loader = new PIXI.Loader()
             .add('sharkTexture', sharkImage)
             .add('didiTexture', didiImage)
+            .add('restartTexture', restartImage)
             .add('bubbleTexture', bubbleImage)
             .add('skynightsceneTexture', skynightsceneImage)
             .add('groundnightsceneTexture', groundnightsceneImage)
@@ -85,14 +88,18 @@ export class Game {
         let skynightscene = new PIXI.Sprite(this.loader.resources["skynightsceneTexture"].texture!);
         this.pixi.stage.addChild(skynightscene);
 
-        // let sunnightscene = new PIXI.Sprite(this.loader.resources["sunnightsceneTexture"].texture!);
-        // this.pixi.stage.addChild(sunnightscene);
+        let sunnightscene = new PIXI.Sprite(this.loader.resources["sunnightsceneTexture"].texture!);
+        this.pixi.stage.addChild(sunnightscene);
 
-        const tilingSprite = new PIXI.TilingSprite(this.loader.resources["groundnightsceneTexture"].texture!,
-            this.pixi.screen.width,
-            this.pixi.screen.height,
-        );
-        this.pixi.stage.addChild(tilingSprite);
+        // const tilingSprite = new PIXI.TilingSprite(this.loader.resources["groundnightsceneTexture"].texture!,
+        //     this.pixi.screen.width,
+        //     this.pixi.screen.height,
+        // );
+        // this.pixi.stage.addChild(tilingSprite);
+
+        this.nightscenefloor = new Groundnightscene(this.loader.resources["groundnightsceneTexture"].texture!, this)
+        this.pixi.stage.addChild(this.nightscenefloor);
+
 
         this.didi = new Didi(this.loader.resources["didiTexture"].texture!, this)
         this.pixi.stage.addChild(this.didi)
@@ -102,24 +109,6 @@ export class Game {
             this.pixi.stage.addChild(shark);
             this.sharks.push(shark);
         }
-
-
-        let count = 0;
-
-        this.pixi.ticker.add(() => {
-            count += 0.005;
-
-            tilingSprite.tileScale.x = 1;
-            // tilingSprite.tileScale.y = 1 + Math.cos(count);
-
-            tilingSprite.tilePosition.x += -2;
-            // tilingSprite.tilePosition.y += 0;
-        })
-
-
-        // this.groundnightscene = new Groundnightscene(this.loader.resources["groundnightscene"].texture!, this)
-        
-        // this.pixi.stage.addChild(this.groundnightscene)
 
       
 
@@ -151,9 +140,9 @@ export class Game {
     private gameOver() {
         console.log("game over")
         this.pixi.stop()
-        this.gameOverButton = new PIXI.Sprite(PIXI.Texture.WHITE) 
+        this.gameOverButton = new PIXI.Sprite(this.loader.resources["restartTexture"].texture!) 
         this.gameOverButton.width = 100
-        this.gameOverButton.height = 50
+        this.gameOverButton.height = 100
         this.gameOverButton.x = 400
         this.gameOverButton.y = 200
         this.gameOverButton.interactive = true
@@ -165,8 +154,8 @@ export class Game {
     }
 
     private resetGame() {
-        this.didi.x = 200;
-        this.didi.y = 500;
+        this.didi.x = 450;
+        this.didi.y = 100;
         // verwijder de game over button
         this.gameOverButton.destroy()
         // herstart pixi

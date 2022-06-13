@@ -525,9 +525,12 @@ var _matterJs = require("matter-js");
 var _didi = require("./didi");
 var _shark = require("./shark");
 var _bubble = require("./bubble");
+var _groundnightscene = require("./groundnightscene");
 //import images
 var _didi1Png = require("./images/didi.1.png");
 var _didi1PngDefault = parcelHelpers.interopDefault(_didi1Png);
+var _restartPng = require("./images/restart.png");
+var _restartPngDefault = parcelHelpers.interopDefault(_restartPng);
 var _spiderwalkPng = require("./images/spiderwalk.png");
 var _spiderwalkPngDefault = parcelHelpers.interopDefault(_spiderwalkPng);
 var _skynightscenePng = require("./images/skynightscene.png");
@@ -556,7 +559,7 @@ class Game {
             height: 450
         });
         document.body.appendChild(this.pixi.view);
-        this.loader = new _pixiJs.Loader().add('sharkTexture', _spiderwalkPngDefault.default).add('didiTexture', _didi1PngDefault.default).add('bubbleTexture', _bubblePngDefault.default).add('skynightsceneTexture', _skynightscenePngDefault.default).add('groundnightsceneTexture', _groundnightscenePngDefault.default).add('sunnightsceneTexture', _sunnightscenePngDefault.default).add("music", _themeMp3Default.default);
+        this.loader = new _pixiJs.Loader().add('sharkTexture', _spiderwalkPngDefault.default).add('didiTexture', _didi1PngDefault.default).add('restartTexture', _restartPngDefault.default).add('bubbleTexture', _bubblePngDefault.default).add('skynightsceneTexture', _skynightscenePngDefault.default).add('groundnightsceneTexture', _groundnightscenePngDefault.default).add('sunnightsceneTexture', _sunnightscenePngDefault.default).add("music", _themeMp3Default.default);
         //Second screen
         // this.pixi = new PIXI.Application({
         //     width: 1920,
@@ -582,10 +585,15 @@ class Game {
         theme.play();
         let skynightscene = new _pixiJs.Sprite(this.loader.resources["skynightsceneTexture"].texture);
         this.pixi.stage.addChild(skynightscene);
-        // let sunnightscene = new PIXI.Sprite(this.loader.resources["sunnightsceneTexture"].texture!);
-        // this.pixi.stage.addChild(sunnightscene);
-        const tilingSprite = new _pixiJs.TilingSprite(this.loader.resources["groundnightsceneTexture"].texture, this.pixi.screen.width, this.pixi.screen.height);
-        this.pixi.stage.addChild(tilingSprite);
+        let sunnightscene = new _pixiJs.Sprite(this.loader.resources["sunnightsceneTexture"].texture);
+        this.pixi.stage.addChild(sunnightscene);
+        // const tilingSprite = new PIXI.TilingSprite(this.loader.resources["groundnightsceneTexture"].texture!,
+        //     this.pixi.screen.width,
+        //     this.pixi.screen.height,
+        // );
+        // this.pixi.stage.addChild(tilingSprite);
+        this.nightscenefloor = new _groundnightscene.Groundnightscene(this.loader.resources["groundnightsceneTexture"].texture, this);
+        this.pixi.stage.addChild(this.nightscenefloor);
         this.didi = new _didi.Didi(this.loader.resources["didiTexture"].texture, this);
         this.pixi.stage.addChild(this.didi);
         for(let i = 0; i < 14; i++){
@@ -593,16 +601,6 @@ class Game {
             this.pixi.stage.addChild(shark);
             this.sharks.push(shark);
         }
-        let count = 0;
-        this.pixi.ticker.add(()=>{
-            count += 0.005;
-            tilingSprite.tileScale.x = 1;
-            // tilingSprite.tileScale.y = 1 + Math.cos(count);
-            tilingSprite.tilePosition.x += -2;
-        // tilingSprite.tilePosition.y += 0;
-        });
-        // this.groundnightscene = new Groundnightscene(this.loader.resources["groundnightscene"].texture!, this)
-        // this.pixi.stage.addChild(this.groundnightscene)
         let spider = new _shark.Shark(this.loader.resources["sharkTexture"].texture);
         this.pixi.stage.addChild(spider);
         this.sharks.push(spider);
@@ -623,9 +621,9 @@ class Game {
     gameOver() {
         console.log("game over");
         this.pixi.stop();
-        this.gameOverButton = new _pixiJs.Sprite(_pixiJs.Texture.WHITE);
+        this.gameOverButton = new _pixiJs.Sprite(this.loader.resources["restartTexture"].texture);
         this.gameOverButton.width = 100;
-        this.gameOverButton.height = 50;
+        this.gameOverButton.height = 100;
         this.gameOverButton.x = 400;
         this.gameOverButton.y = 200;
         this.gameOverButton.interactive = true;
@@ -635,8 +633,8 @@ class Game {
         this.pixi.stage.addChild(this.gameOverButton);
     }
     resetGame() {
-        this.didi.x = 200;
-        this.didi.y = 500;
+        this.didi.x = 450;
+        this.didi.y = 100;
         // verwijder de game over button
         this.gameOverButton.destroy();
         // herstart pixi
@@ -663,7 +661,7 @@ class Game {
 }
 new Game();
 
-},{"pixi.js":"dsYej","./shark":"kN3uI","./bubble":"iOWvL","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","url:./images/theme.mp3":"fUD3U","./images/groundnightscene.png":"jUAs0","./images/didi.1.png":"gZmpI","./images/spiderwalk.png":"hgYHe","./images/skynightscene.png":"eKnei","matter-js":"2oYKU","./didi":"jQqB8","./images/sunnightscene.png":"aziwe","./images/bubble.png":"iMP3P"}],"dsYej":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./shark":"kN3uI","./bubble":"iOWvL","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","url:./images/theme.mp3":"fUD3U","./images/groundnightscene.png":"jUAs0","./images/didi.1.png":"gZmpI","./images/spiderwalk.png":"hgYHe","./images/skynightscene.png":"eKnei","matter-js":"2oYKU","./didi":"jQqB8","./images/sunnightscene.png":"aziwe","./images/bubble.png":"iMP3P","./images/restart.png":"8TrrX","./groundnightscene":"6WhoW"}],"dsYej":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "utils", ()=>_utils
@@ -37169,11 +37167,13 @@ var _pixiJs = require("pixi.js");
 class Shark extends _pixiJs.Sprite {
     constructor(texture){
         super(texture);
-        this.speed = Math.random() * 5;
+        this.speed = 2;
         this.x = Math.random() * window.innerWidth + 100;
         this.y = Math.random() * window.innerHeight;
-        this.anchor.set(0.5);
-        this.scale.set(0.6);
+        // this.x = 1000;
+        // this.y = 100;
+        this.anchor.set(-5);
+        this.scale.set(0.5);
         const filter = new _pixiJs.filters.ColorMatrixFilter();
         filter.hue(Math.random() * 360, false);
         this.filters = [
@@ -37185,6 +37185,7 @@ class Shark extends _pixiJs.Sprite {
     }
     swim() {
         this.x -= this.speed;
+        this.y = 1.1;
         this.y += Math.cos(this.x * 0.03) * 1.1;
         if (this.x < -100) {
             this.x = window.innerWidth + 100;
@@ -37192,7 +37193,7 @@ class Shark extends _pixiJs.Sprite {
         }
     }
     hitShark() {
-        console.log("hit shark");
+        console.log("hit spider");
     }
 }
 
@@ -37206,8 +37207,8 @@ class Bubble extends _pixiJs.Sprite {
     constructor(bx, by, mygame, texture){
         super(texture);
         this.scale.set(0.7);
-        this.x = bx + 180;
-        this.y = by + 20;
+        this.x = bx + 20;
+        this.y = by + 5;
         this.mygame = mygame;
     }
     hit() {
@@ -45083,27 +45084,13 @@ var _pixiJs = require("pixi.js");
 var _matterJs = require("matter-js");
 class Didi extends _pixiJs.Sprite {
     // jumpSound:HTMLAudioElement
-    speed = 0;
     xspeed = 0;
     yspeed = 0;
     constructor(texture, game){
         super(texture);
-        this.game = game;
-        // this.anchor.set(0.5)
-        this.xspeed = 0;
-        this.yspeed = 0;
-        this.x = 100;
-        this.y = 330;
+        this.anchor.set(0.5);
         this.scale.set(0.3);
         this.game = game;
-        console.log(this.game);
-        window.addEventListener("keydown", (e)=>this.onKeyDown(e)
-        );
-        window.addEventListener("keyup", (e)=>this.onKeyUp(e)
-        );
-        // this.x = 100;
-        // // this.y = 375;
-        // this.scale.set(0.2)
         const didiOptions = {
             density: 0.001,
             friction: 0.7,
@@ -45112,43 +45099,61 @@ class Didi extends _pixiJs.Sprite {
             restitution: 0.5,
             inertia: Infinity,
             inverseInertia: Infinity,
-            label: "Player"
+            label: "Didi"
         };
-        this.rigidBody = _matterJs.Bodies.rectangle(600, 230, 75, 100, didiOptions);
+        this.rigidBody = _matterJs.Bodies.rectangle(90, 230, 75, 100, didiOptions);
         _matterJs.Composite.add(game.engine.world, this.rigidBody);
-    // window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
-    // window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
-    }
-    swim() {
-        this.x += this.xspeed;
-        this.y += this.yspeed;
+        window.addEventListener("keydown", (e)=>this.onKeyDown(e)
+        );
+        window.addEventListener("keyup", (e)=>this.onKeyUp(e)
+        );
     }
     shoot() {
         this.game.shootBubble(this.x, this.y);
     }
-    update() {
-        if (this.speed != 0) {
-            _matterJs.Body.setVelocity(this.rigidBody, {
-                x: this.speed,
-                y: this.rigidBody.velocity.y
+    jump() {
+        if (this.y >= 300) {
+            let jumpforce = -0.2;
+            _matterJs.Body.applyForce(this.rigidBody, {
+                x: this.rigidBody.position.x,
+                y: this.rigidBody.position.y
+            }, {
+                x: 0,
+                y: jumpforce
             });
-            if (this.x > 1500) this.x = 0;
-            else if (this.x < -100) this.x = 1500;
-            else if (this.y < -20) {
-                this.x = -100;
-                this.y = 250;
-            }
-            this.x = this.rigidBody.position.x;
-            this.y = this.rigidBody.position.y;
-            this.rotation = this.rigidBody.angle;
-            if (this.rigidBody.position.y > 1500) this.resetPosition();
-        } else if (this.speed == 0) _matterJs.Body.setVelocity(this.rigidBody, {
-            x: 0,
-            y: 4
+        }
+    }
+    update() {
+        if (this.xspeed != 0) _matterJs.Body.setVelocity(this.rigidBody, {
+            x: this.xspeed,
+            y: this.rigidBody.velocity.y
         });
+        // if (this.x > 1500) {
+        //   this.x = 0;
+        //   // this.jumpSound.play()
+        // } else if (this.x < -100) {
+        //   this.x = 1500
+        // } else if (this.y < -20) {
+        //   this.x = -100;
+        //   this.y = 250;
+        // }
+        this.x = this.rigidBody.position.x;
+        this.y = this.rigidBody.position.y;
+        this.rotation = this.rigidBody.angle;
+        if (this.rigidBody.position.y > 500) this.resetPosition();
     }
     onKeyDown(e) {
-        console.log('hello');
+        if (e.key === " " || e.key === "ArrowUp") {
+            if (this.rigidBody.velocity.y > -0.4 && this.rigidBody.velocity.y < 0.4) _matterJs.Body.applyForce(this.rigidBody, {
+                x: this.rigidBody.position.x,
+                y: this.rigidBody.position.y
+            }, {
+                x: 0,
+                y: -0.25
+            });
+        // this.jumpSound.play()
+        }
+        console.log(e.key);
         switch(e.key.toUpperCase()){
             case "F":
                 this.shoot();
@@ -45163,7 +45168,8 @@ class Didi extends _pixiJs.Sprite {
                 break;
             case "W":
             case "ARROWUP":
-                this.yspeed = -7;
+            case " ":
+                this.jump();
                 break;
             case "S":
             case "ARROWDOWN":
@@ -45209,6 +45215,37 @@ module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "sunnig
 },{"./helpers/bundle-url":"lgJ39"}],"iMP3P":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "bubble.56ab0ad6.png" + "?" + Date.now();
 
-},{"./helpers/bundle-url":"lgJ39"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
+},{"./helpers/bundle-url":"lgJ39"}],"8TrrX":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "restart.7ecd3a10.png" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}],"6WhoW":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Groundnightscene", ()=>Groundnightscene
+);
+var _pixiJs = require("pixi.js");
+var _matterJs = require("matter-js");
+class Groundnightscene extends _pixiJs.TilingSprite {
+    // private count:number
+    constructor(texture, game){
+        super(texture);
+        this.x = 450;
+        this.y = 250;
+        this.anchor.set(0.5);
+        this.width = 5000;
+        this.height = 500;
+        // x, y, width, height
+        this.rigidBody = _matterJs.Bodies.rectangle(450, 480, 5000, 100, {
+            isStatic: true
+        });
+        _matterJs.Composite.add(game.engine.world, this.rigidBody);
+    }
+    update() {
+        this.x = this.rigidBody.position.x;
+        this.y = this.rigidBody.position.y;
+    }
+}
+
+},{"pixi.js":"dsYej","matter-js":"2oYKU","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
 
 //# sourceMappingURL=index.901f85c2.js.map

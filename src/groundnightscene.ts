@@ -2,23 +2,27 @@ import * as PIXI from "pixi.js";
 import * as Matter from 'matter-js'
 import { Game } from "./game";
 
-export class Groundnightscene extends PIXI.Sprite {
+export class Groundnightscene extends PIXI.TilingSprite {
   private rigidBody: Matter.Body;
+  // private count:number
 
   constructor(texture: PIXI.Texture, game: Game) {
     super(texture);
-    this.x = 100;
-    this.y = 100;
+    this.x = 450;
+    this.y = 250;
     this.anchor.set(0.5);
-    this.width = 1800
-    this.height = 450
+    this.width = 5000;
+    this.height = 500;
 
-    this.rigidBody = Matter.Bodies.rectangle(-500, 500, 9000, 200, {
-      isStatic: true
+        // x, y, width, height
+    this.rigidBody = Matter.Bodies.rectangle(450, 480, 5000, 100, { 
+      isStatic: true 
     });
     Matter.Composite.add(game.engine.world, this.rigidBody);
+  }
 
-    this.x = this.rigidBody.position.x;
-    this.y = this.rigidBody.position.y;
+  update(){
+    this.x = this.rigidBody.position.x
+    this.y = this.rigidBody.position.y
   }
 }
