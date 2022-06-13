@@ -13,7 +13,7 @@ import { Groundnightscene } from "./groundnightscene"
 import didiImage from "./images/didi.1.png"
 import sharkImage from "./images/spiderwalk.png"
 import skynightsceneImage from "./images/skynightscene.png"
-import bubbleImage from "./images/Bubble.png"
+import bubbleImage from "./images/bubble.png"
 import groundnightsceneImage from "./images/groundnightscene.png"
 import sunnightsceneImage from "./images/sunnightscene.png"
 
